@@ -1,54 +1,55 @@
-
 class ProductCard extends HTMLElement {
-  constructor() {
-    super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    constructor() {
+        super();
+        const shadow = this.attachShadow({ mode: 'open' });
 
-    const template = document.createElement('template');
-    template.innerHTML = `
-      <style>
-        .product-card {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-        .content {
-            padding: 1rem;
-        }
-        h4 {
-            font-size: 1.4rem;
-            margin: 0 0 0.5rem 0;
-            color: var(--primary-color, #2c5e2e);
-        }
-        p {
-            font-size: 1rem;
-            margin: 0;
-        }
-      </style>
-      <div class="product-card">
-        <img src="${this.getAttribute('image')}" alt="${this.getAttribute('name')}">
-        <div class="content">
-          <h4>${this.getAttribute('name')}</h4>
-          <p>${this.getAttribute('price')}</p>
-        </div>
-      </div>
-    `;
-
-    shadow.appendChild(template.content.cloneNode(true));
-  }
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                :host {
+                    display: block; 
+                }
+                .product-card {
+                    background: var(--card-bg, #fff);
+                    border-radius: 10px;
+                    box-shadow: 0 5px 15px var(--shadow-color, rgba(0,0,0,0.1));
+                    overflow: hidden;
+                    transition: transform 0.3s, box-shadow 0.3s;
+                    cursor: pointer;
+                }
+                .product-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+                }
+                img {
+                    width: 100%;
+                    height: 180px;
+                    object-fit: cover;
+                }
+                .content {
+                    padding: 1rem;
+                }
+                h4 {
+                    font-size: 1.4rem;
+                    margin: 0 0 0.5rem 0;
+                    color: var(--primary-color, #2c5e2e);
+                }
+                p {
+                    font-size: 1rem;
+                    margin: 0;
+                }
+            </style>
+            <div class="product-card">
+                <img src="${this.getAttribute('image')}" alt="${this.getAttribute('name')}">
+                <div class="content">
+                    <h4>${this.getAttribute('name')}</h4>
+                    <p>${this.getAttribute('price')}</p>
+                </div>
+            </div>
+        `;
+        shadow.appendChild(template.content.cloneNode(true));
+    }
 }
-
 customElements.define('product-card', ProductCard);
 
 const products = {
@@ -71,14 +72,55 @@ const products = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    for (const category in products) {
-        const grid = document.getElementById(`${category}-grid`);
-        products[category].forEach(product => {
-            const productCard = document.createElement('product-card');
-            productCard.setAttribute('name', product.name);
-            productCard.setAttribute('price', product.price);
-            productCard.setAttribute('image', product.image);
-            grid.appendChild(productCard);
-        });
+    const productContainer = document.getElementById('product-container');
+    const categoryLinks = document.querySelectorAll('.category-sidebar a');
+    const cartIcon = document.querySelector('.cart');
+    const cartModal = document.querySelector('.shopping-cart-modal');
+    const closeCartButton = document.getElementById('close-cart');
+
+    function displayProducts(category) {
+        productContainer.innerHTML = '';
+        const productsToDisplay = category === 'all' 
+            ? Object.values(products).flat() 
+            : products[category];
+
+        if (productsToDisplay) {
+            productsToDisplay.forEach(product => {
+                const productCard = document.createElement('product-card');
+                productCard.setAttribute('name', product.name);
+                productCard.setAttribute('price', product.price);
+                productCard.setAttribute('image', product.image);
+                productContainer.appendChild(productCard);
+            });
+        }
     }
+
+    categoryLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = link.dataset.category;
+            
+            categoryLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            displayProducts(category);
+        });
+    });
+
+    cartIcon.addEventListener('click', () => {
+        cartModal.style.display = 'block';
+    });
+
+    closeCartButton.addEventListener('click', () => {
+        cartModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+            cartModal.style.display = 'none';
+        }
+    });
+
+    // Initial display of all products
+    displayProducts('all');
 });

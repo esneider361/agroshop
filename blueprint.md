@@ -1,24 +1,38 @@
-
-# Blueprint: La Granja Directo
+# Blueprint: Agroshop
 
 ## Overview
 
-This project is a modern, single-page web application for an agricultural products store called "La Granja Directo". The application will showcase various farm products, categorized for easy browsing, and provide a way for customers to get in touch.
+This project is a modern, single-page web application for an agricultural products store called "Agroshop". The application showcases various farm products, categorized for easy browsing, and will include a functional shopping cart. The goal is to create a visually appealing, responsive, and interactive user experience using modern web technologies.
 
 ## Design & Features
 
-- **Homepage:** A welcoming interface with a prominent hero section and a clear value proposition.
-- **Product Showcase:** A grid-based layout to display products within categories like "Fruits", "Vegetables", "Dairy", and "Cereals".
 - **Modern UI/UX:**
-    - Clean and visually appealing design.
+    - Clean and visually appealing design with a professional color palette and typography.
     - Responsive layout for optimal viewing on all devices.
-    - Interactive UI elements with subtle animations.
-    - Use of web components for a modular and maintainable structure.
-- **Contact Section:** A simple and accessible contact form.
-- **Footer:** Containing contact information, social media links, and quick navigation.
+    - Interactive UI elements, including a dynamic product grid and a shopping cart modal.
+    - Use of Web Components (`<product-card>`) for a modular and maintainable structure.
+- **Product Showcase:**
+    - A grid-based layout to display products.
+    - Sidebar for filtering products by category ("All", "Fruits", "Vegetables", "Dairy", "Cereals").
+    - The product grid dynamically updates based on the selected category.
+- **Shopping Cart:**
+    - A cart icon in the header shows the number of items.
+    - Clicking the cart icon opens a modal displaying the items in the cart.
+    - Functionality to close the cart modal.
+- **Styling:**
+    - A professional and modern design.
+    - Custom properties (CSS Variables) for easy theming.
+    - Hover effects on products and links to improve user feedback.
 
 ## Current Plan
 
-1. **Setup Initial HTML Structure:** Create the main `index.html` file with placeholders for the header, product sections, contact form, and footer.
-2. **Develop CSS:** Create a `style.css` file to implement the design, focusing on a mobile-first approach.
-3. **Implement Web Components:** Create a `main.js` file to define and register custom elements for reusable components like product cards.
+- **Fix JavaScript Logic:**
+    - Implement a `displayProducts` function to render products in the `product-container` based on a category filter.
+    - Add event listeners to the category sidebar links to trigger the `displayProducts` function.
+    - Ensure all products are displayed by default when the page loads.
+- **Implement Shopping Cart:**
+    - Add event listeners to open and close the shopping cart modal.
+    - Create the logic to add products to the cart (this will be a basic implementation for now).
+- **Refine HTML & CSS:**
+    - Add a placeholder for the logo.
+    - Add a CSS class to visually indicate the currently active category filter.
